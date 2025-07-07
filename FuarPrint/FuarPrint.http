@@ -1,0 +1,6 @@
+@FuarPrint_HostAddress = http://localhost:5259
+
+GET {{FuarPrint_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
