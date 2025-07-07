@@ -28,6 +28,16 @@ builder.Services.AddScoped<IColorDal, EfColorDal>();
 builder.Services.AddScoped<IProductImageDal, EfProductImageDal>();
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // Frontend URL
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+         .AllowCredentials();
+    });
+});
 
 builder.Services.AddDbContext<FuarDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -51,10 +61,44 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
         RoleClaimType = ClaimTypes.Role // vacib!
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var authHeader = context.Request.Headers["Authorization"].ToString();
+            Console.WriteLine("Authorization header: " + authHeader);
+
+            if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            {
+                // BURADA SADECE TOKEN QISMINI AL!
+                context.Token = authHeader.Substring("Bearer ".Length).Trim();
+                Console.WriteLine("Extracted Token: " + context.Token);
+            }
+
+            return Task.CompletedTask;
+        },
+
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"❌ Authentication Failed: {context.Exception.GetType().Name} - {context.Exception.Message}");
+            return Task.CompletedTask;
+        },
+
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine("✅ Token Validated Successfully");
+            return Task.CompletedTask;
+        }
+    };
+
+
+
+
 });
 
 
@@ -66,8 +110,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseStaticFiles();
 app.UseHttpsRedirection();
+app.UseCors("AllowLocalhost");
+
 
 app.UseAuthentication();
 app.UseAuthorization();

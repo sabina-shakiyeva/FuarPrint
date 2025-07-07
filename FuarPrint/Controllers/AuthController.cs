@@ -28,7 +28,6 @@ namespace FuarPrint.Controllers
             _roleManager = roleManager;
         }
 
-        // ✅ ADMIN QEYDIYYATI
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp([FromBody] RegisterDto dto)
         {
@@ -52,7 +51,6 @@ namespace FuarPrint.Controllers
             return Ok(new { Message = "Admin created successfully." });
         }
 
-        // ✅ ADMIN LOGIN + TOKEN
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] LoginDto dto)
         {
@@ -76,7 +74,7 @@ namespace FuarPrint.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
                 expires: DateTime.UtcNow.AddHours(3),
                 claims: claims,
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)

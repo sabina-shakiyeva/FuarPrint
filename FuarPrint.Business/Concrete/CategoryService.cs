@@ -41,7 +41,7 @@ namespace FuarPrint.Business.Concrete
         public async Task DeleteAsync(int id)
         {
             var category = await _categoryDal.GetByIdAsync(id);
-            if (category != null) return;
+            if (category == null) return;
 
             await _categoryDal.Delete(category);
         }

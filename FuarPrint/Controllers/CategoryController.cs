@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FuarPrint.Controllers
 {
+   
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
@@ -18,7 +19,6 @@ namespace FuarPrint.Controllers
             _categoryService = categoryService;
         }
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var result=await _categoryService.GetAllAsync();
@@ -26,8 +26,8 @@ namespace FuarPrint.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles ="Admin")]
-        //[Consumes("multipart/form-data")]
+        [Consumes("multipart/form-data")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add([FromForm] CategoryCreateDto categoryDto)
         {
             await _categoryService.AddAsync(categoryDto);
