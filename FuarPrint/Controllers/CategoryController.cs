@@ -1,5 +1,6 @@
 ﻿using FuarPrint.Business.Abstract;
 using FuarPrint.Entities.Models;
+using FuarPrint.Entities.Models.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,27 +27,29 @@ namespace FuarPrint.Controllers
 
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Add([FromBody] CategoryDto categoryDto)
+        //[Consumes("multipart/form-data")]
+        public async Task<IActionResult> Add([FromForm] CategoryCreateDto categoryDto)
         {
             await _categoryService.AddAsync(categoryDto);
-            return Ok(categoryDto);
+            return Ok("Category added successfully");
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Update(int id, [FromBody] CategoryDto categoryDto)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update(int id, [FromForm] CategoryUpdateDto categoryDto)
         {
-            categoryDto.Id = id;
-            await _categoryService.UpdateAsync(categoryDto);
+            await _categoryService.UpdateAsync(id,categoryDto);
             return Ok(categoryDto);
         }
+        
 
         [HttpDelete("{id}")]
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _categoryService.DeleteAsync(id);
-            return Ok("Deleted");
+            return Ok("Deleted successfully");
         }
 
 
