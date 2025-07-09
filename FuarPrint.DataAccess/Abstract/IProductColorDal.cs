@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace FuarPrint.DataAccess.Abstract
 {
-    public interface IProductDal:IEntityRepository<Product>
+    public interface IProductColorDal: IEntityRepository<ProductColor>
     {
-        Task<List<Product>> GetAllWithIncludesAsync();
-        Task<Product> GetByIdWithIncludesAsync(int id);
+        Task<bool> ExistsAsync(int productId, int colorId);
+        Task<ProductColor?> GetByCompositeKeyAsync(int productId, int colorId);
     }
 }

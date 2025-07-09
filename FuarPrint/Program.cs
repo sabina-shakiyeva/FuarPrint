@@ -26,6 +26,13 @@ builder.Services.AddScoped<ICategoryDal, EfCategoryDal>();
 builder.Services.AddScoped<IProductDal, EfProductDal>();
 builder.Services.AddScoped<IColorDal, EfColorDal>();
 builder.Services.AddScoped<IProductImageDal, EfProductImageDal>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IColorService, ColorService>();
+builder.Services.AddScoped<IProductColorService, ProductColorService>();
+builder.Services.AddScoped<IProductColorDal, EfProductColorDal>();
+builder.Services.AddScoped<IProductImageService, ProductImageService>();
+
+
 
 
 builder.Services.AddCors(options =>
