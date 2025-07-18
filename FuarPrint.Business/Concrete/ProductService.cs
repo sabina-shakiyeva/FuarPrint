@@ -175,6 +175,50 @@ namespace FuarPrint.Business.Concrete
                 }
             }
         }
+        public async Task<List<ProductGetDto>> GetByColorIdAsync(int colorId)
+        {
+            var products = await _productDal.GetAllWithIncludesAsync();
+
+            var filtered = products
+                .Where(p => p.ProductColors.Any(pc => pc.ColorId == colorId))
+                .ToList();
+
+            return filtered.Select(p => new ProductGetDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                CategoryId = p.CategoryId,
+                CategoryName = p.Category?.Name,
+                IsActive = p.IsActive,
+                ImageUrls = p.ProductImages.Select(i => i.ImageUrl).ToList(),
+                ColorNames = p.ProductColors.Select(c => c.Color.Name).ToList()
+            }).ToList();
+        }
+
+
+
+
+        public async Task<List<ProductGetDto>> GetByCategoryIdAsync(int categoryId)
+        {
+            var products = await _productDal.GetAllWithIncludesAsync();
+            var filtered = products.Where(p => p.CategoryId == categoryId).ToList();
+
+            return filtered.Select(p => new ProductGetDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                CategoryId = p.CategoryId,
+                CategoryName = p.Category?.Name,
+                IsActive = p.IsActive,
+                ImageUrls = p.ProductImages.Select(i => i.ImageUrl).ToList(),
+                ColorNames = p.ProductColors.Select(c => c.Color.Name).ToList()
+            }).ToList();
+        }
+
 
     }
 }

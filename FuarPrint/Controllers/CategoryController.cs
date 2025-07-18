@@ -27,7 +27,7 @@ namespace FuarPrint.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add([FromForm] CategoryCreateDto categoryDto)
         {
             await _categoryService.AddAsync(categoryDto);
@@ -35,7 +35,7 @@ namespace FuarPrint.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles ="Admin")]
+        //[Authorize(Roles ="Admin")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update(int id, [FromForm] CategoryUpdateDto categoryDto)
         {

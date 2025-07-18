@@ -16,5 +16,9 @@ namespace FuarPrint.Business.Abstract
         Task AddAsync(ProductCreateDto dto);
         Task UpdateAsync(int id, ProductUpdateDto dto);
         Task DeleteAsync(int id);
+        Task<List<ProductGetDto>> GetByCategoryIdAsync(int categoryId);
+        Task<List<ProductGetDto>> GetByColorIdAsync(int colorId);
+
+
     }
 }

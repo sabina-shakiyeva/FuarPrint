@@ -50,6 +50,12 @@ namespace FuarPrint.Controllers
             await _productService.UpdateAsync(id, dto);
             return Ok("Product updated.");
         }
+        [HttpGet("color/{colorId}")]
+        public async Task<IActionResult> GetByColor(int colorId)
+        {
+            var products = await _productService.GetByColorIdAsync(colorId);
+            return Ok(products);
+        }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
@@ -58,5 +64,13 @@ namespace FuarPrint.Controllers
             await _productService.DeleteAsync(id);
             return Ok("Product deleted.");
         }
+
+        [HttpGet("category/{categoryId}")]
+        public async Task<IActionResult> GetByCategoryId(int categoryId)
+        {
+            var products=await _productService.GetByCategoryIdAsync(categoryId);
+            return Ok(products);
+        }
+
     }
 }
